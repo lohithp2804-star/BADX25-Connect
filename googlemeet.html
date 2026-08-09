@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BREAKING BADX25 | Team Meet</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Inter, -apple-system, BlinkMacSystemFont,
+                "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+            color: #111;
+            background: #f4f4f2;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            overflow-x: hidden;
+        }
+
+        /* =========================
+           SUBTLE 3D BACKGROUND
+        ========================== */
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-one {
+            width: 300px;
+            height: 300px;
+            top: -140px;
+            right: -100px;
+
+            background: linear-gradient(
+                145deg,
+                #ffffff,
+                #d5d5d5
+            );
+
+            box-shadow:
+                inset -35px -35px 70px rgba(0, 0, 0, 0.08),
+                20px 30px 80px rgba(0, 0, 0, 0.08);
+        }
+
+        .orb-two {
+            width: 190px;
+            height: 190px;
+            bottom: -90px;
+            left: -60px;
+
+            background: linear-gradient(
+                145deg,
+                #eeeeee,
+                #cccccc
+            );
+
+            box-shadow:
+                inset 20px 20px 50px rgba(255, 255, 255, 0.8),
+                15px 20px 60px rgba(0, 0, 0, 0.07);
+        }
+
+        /* =========================
+           MAIN CARD
+        ========================== */
+
+        .card {
+            width: min(90%, 720px);
+
+            padding: 65px 60px;
+
+            background: rgba(255, 255, 255, 0.82);
+
+            border: 1px solid rgba(0, 0, 0, 0.08);
+
+            border-radius: 28px;
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.08),
+                0 5px 15px rgba(0, 0, 0, 0.04);
+
+            text-align: center;
+
+            position: relative;
+            z-index: 2;
+        }
+
+        /* =========================
+           LABEL
+        ========================== */
+
+        .label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 14px;
+
+            border-radius: 50px;
+
+            background: #f1f1f1;
+
+            border: 1px solid #dedede;
+
+            color: #777;
+
+            font-size: 10px;
+            font-weight: 600;
+
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .status {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #222;
+        }
+
+        /* =========================
+           TITLE
+        ========================== */
+
+        h1 {
+            margin-top: 28px;
+
+            font-size: clamp(48px, 9vw, 82px);
+
+            line-height: 0.9;
+
+            letter-spacing: -5px;
+
+            font-weight: 800;
+
+            color: #111;
+        }
+
+        h1 span {
+            color: #777;
+            font-weight: 400;
+        }
+
+        /* =========================
+           SUBTITLE
+        ========================== */
+
+        .subtitle {
+            margin-top: 30px;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+
+            color: #777;
+        }
+
+        /* =========================
+           QUOTE
+        ========================== */
+
+        .quote {
+            margin: 35px auto;
+
+            max-width: 470px;
+
+            color: #555;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+        }
+
+        .quote strong {
+            color: #111;
+            font-weight: 600;
+        }
+
+        /* =========================
+           GOOGLE MEET BUTTON
+        ========================== */
+
+        .join-btn {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+
+            min-width: 210px;
+
+            padding: 16px 25px;
+
+            border-radius: 14px;
+
+            background: #111;
+
+            color: #fff;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            letter-spacing: 0.5px;
+
+            box-shadow:
+                0 12px 25px rgba(0, 0, 0, 0.15);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+        }
+
+        .join-btn:hover {
+            transform: translateY(-3px);
+
+            background: #222;
+
+            box-shadow:
+                0 18px 35px rgba(0, 0, 0, 0.18);
+        }
+
+        .arrow {
+            font-size: 17px;
+
+            transition:
+                transform 0.25s ease;
+        }
+
+        .join-btn:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        /* =========================
+           FOOTER
+        ========================== */
+
+        .footer {
+            width: 100%;
+
+            margin-top: 55px;
+
+            padding: 35px 20px 30px;
+
+            text-align: center;
+
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-title {
+            color: #777;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 25px;
+        }
+
+        .social-links {
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 28px;
+        }
+
+        .social {
+            width: 62px;
+            height: 62px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #eeeeee;
+
+            border: 1px solid #d9d9d9;
+
+            color: #777;
+
+            text-decoration: none;
+
+            transition:
+                transform 0.25s ease,
+                background 0.25s ease,
+                color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .social svg {
+            width: 23px;
+            height: 23px;
+
+            fill: currentColor;
+        }
+
+        .social:hover {
+            transform: translateY(-5px);
+
+            background: #111;
+
+            color: #fff;
+
+            border-color: #111;
+
+            box-shadow:
+                0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .footer-bottom {
+            margin-top: 22px;
+
+            font-size: 10px;
+
+            color: #aaa;
+
+            letter-spacing: 1.5px;
+        }
+
+        /* =========================
+           DECORATIVE LINES
+        ========================== */
+
+        .line-horizontal {
+            position: fixed;
+
+            width: 100px;
+            height: 1px;
+
+            left: 30px;
+            top: 50%;
+
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .line-vertical {
+            position: fixed;
+
+            width: 1px;
+            height: 100px;
+
+            right: 30px;
+            top: 30px;
+
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 600px) {
+
+            body {
+                padding-top: 30px;
+            }
+
+            .card {
+                padding: 50px 25px;
+
+                border-radius: 22px;
+            }
+
+            h1 {
+                letter-spacing: -3px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .quote {
+                font-size: 14px;
+            }
+
+            .join-btn {
+                width: 100%;
+            }
+
+            .social-links {
+                gap: 18px;
+            }
+
+            .social {
+                width: 56px;
+                height: 56px;
+            }
+
+            .line-horizontal,
+            .line-vertical {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Subtle 3D background -->
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+
+    <div class="line-horizontal"></div>
+    <div class="line-vertical"></div>
+
+
+    <!-- =========================
+         MAIN SECTION
+    ========================== -->
+
+    <main class="card">
+
+        <div class="label">
+            <span class="status"></span>
+            Team Meeting
+        </div>
+
+        <h1>
+            BREAKING<br>
+            BAD<span>X25</span>
+        </h1>
+
+        <p class="subtitle">
+            One team. One vision.<br>
+            One more step towards something bigger.
+        </p>
+
+        <p class="quote">
+            "Great things are never built by one person.
+            <strong>Let's build it together.</strong>"
+        </p>
+
+        <a
+            class="join-btn"
+            href="https://meet.google.com/cct-kjmy-yha"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            JOIN GOOGLE MEET
+            <span class="arrow">→</span>
+        </a>
+
+    </main>
+
+
+    <!-- =========================
+         DEVELOPER FOOTER
+    ========================== -->
+
+    <footer class="footer">
+
+        <div class="footer-title">
+            Connect with the developer
+        </div>
+
+        <div class="social-links">
+
+            <!-- EMAIL -->
+            <a
+                class="social"
+                href="mailto:lohithdaniel2804@gmail.com"
+                aria-label="Email"
+                title="Email"
+            >
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+            </a>
+
+
+            <!-- LINKEDIN -->
+            <a
+                class="social"
+                href="https://www.linkedin.com/in/p-lohith-2074a331a"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                title="LinkedIn"
+            >
+                <svg viewBox="0 0 24 24">
+                    <path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3C4.15 3 3.25 3.9 3.25 5s.9 2 2 2 2-.9 2-2-.9-2-2-2zM20.44 13.4c0-3.46-1.85-5.07-4.32-5.07-1.99 0-2.88 1.1-3.38 1.87V8.5H9.36V20h3.38v-6.23c0-1.64.31-3.23 2.34-3.23 2 0 2.03 1.87 2.03 3.34V20h3.38l-.05-6.6z"/>
+                </svg>
+            </a>
+
+
+            <!-- GITHUB -->
+            <a
+                class="social"
+                href="https://github.com/lohithp2804-star"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                title="GitHub"
+            >
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.85 10.91.57.1.78-.25.78-.55v-2.15c-3.19.69-3.86-1.54-3.86-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.74 2.67 1.24 3.32.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.17a10.9 10.9 0 0 1 5.74 0c2.19-1.48 3.15-1.17 3.15-1.17.62 1.57.23 2.73.11 3.02.73.8 1.18 1.82 1.18 3.07 0 4.41-2.69 5.37-5.25 5.66.41.35.77 1.04.77 2.1v3.12c0 .3.21.65.79.54A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
+                </svg>
+            </a>
+
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 BREAKING BADX25
+        </div>
+
+    </footer>
+
+</body>
+</html>
